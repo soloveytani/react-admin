@@ -7,7 +7,7 @@ class LoginForm extends Component {
         return (
             <div className="loginForm">
                 <h1>Login Form</h1>
-                <Link to="/home">Log In</Link>
+                <Link to="/">Log In</Link>
             </div>
 
         );
