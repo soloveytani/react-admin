@@ -29,6 +29,16 @@
 }
 
 .loginForm {
-  width: 100%;
+  width: 400px;
+  margin: 20px auto 0;
+  max-width: 100%;
   text-align: center;
+}
+
+.login-input {
+  width: 100%;
+}
+
+.login-submit-button {
+  margin-top: 20px;
 }
