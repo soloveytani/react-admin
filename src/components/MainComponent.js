@@ -1,32 +1,35 @@
 import React, { Component } from 'react';
+import { withStyles } from '@material-ui/core/styles';
 import { Route, Redirect } from "react-router-dom";
 import Layout from '../components/Layout';
 import Home from '../pages/Home';
 import UserList from '../pages/UserList';
 import RequestList from '../pages/RequestList';
 import LoginForm from '../pages/LoginForm';
+import { connect } from 'react-redux';
+import { login }  from '../actions';
 
+const styles = theme => ({
+    container: {
+        backgroundColor: '#f0f3f9'
+    }
+})
+
+const mapStateToProps = ({ auth: {token}}) => {
+    return { token }
+};
 class MainComponent extends Component {
-
-    state = {
-        loggedIn: false
-    };
-
-    authentification = () => {
-        this.setState({ loggedIn: true });
-    };
-
     render() {
-        const { loggedIn } = this.state;
+        const { token, classes } = this.props;
         return (
-            <div>
+            <div className={ classes.container }>
                 <Route path="/login" exact component={ LoginForm } />
-                <Route path="/" exact component={ () => loggedIn ? <Layout><Home/></Layout> : <Redirect to="/login"/> }/>
-                <Route path="/users" component={ () => <Layout><UserList/></Layout> }/>
-                <Route path="/requests" component={ () => <Layout><RequestList/></Layout> }/>
+                <Route path="/" exact component={ () => token ? <Layout><Home/></Layout> : <Redirect to="/login"/> }/>
+                <Route path="/users" component={ () => <Layout><UserList/></Layout>}/>
+                <Route path="/requests" component={ () => token ? <Layout><RequestList/></Layout> : <Redirect to="/login"/> }/>
             </div>
         );
     };
 };
 
-export default MainComponent;
+export default withStyles(styles)(connect(mapStateToProps, { login })(MainComponent));

@@ -1,18 +1,38 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import MainComponent from './components/MainComponent';
+import { createMuiTheme } from '@material-ui/core/styles';
 
+const theme = createMuiTheme({
+    palette: {
+      primary: {
+        light: '#757ce8',
+        main: '#3f50b5',
+        dark: '#002884',
+        contrastText: '#fff',
+      },
+      secondary: {
+        light: '#ff7961',
+        main: '#f44336',
+        dark: '#ba000d',
+        contrastText: '#000',
+      },
+    },
+    typography: {
+      useNextVariants: true,
+    },
+});
 class App extends Component {
 
   render() {
-    return (
-      <div>
-        <Router>
-          <Route component={MainComponent}/>
-        </Router>
-      </div>
-    );
-  }
+        return (
+            <div>
+                <Router>
+                    <Route component={MainComponent}/>
+                </Router>
+            </div>
+        );
+    }
 }
 
 export default App;

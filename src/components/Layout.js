@@ -1,23 +1,50 @@
 import React from 'react';
-import { Link } from "react-router-dom";
-import '../App.scss';
+import { withStyles } from '@material-ui/core/styles';
 
-function Layout(props) {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <p> Administration Panel</p>
-      </header>
-      <div className="Container">
-        <Link to="/users">Users</Link>
-        <Link to="/requests">Requests</Link>
-        <Link to="/login">Log out</Link>
-      </div>
-      <div className="Container">
-        { props.children }
-      </div>
-    </div>
-  );
+import LeftDrawer from './LeftDrawer';
+
+const styles = theme => ({
+    app: {
+        textAlign: 'center'
+    },
+    appHeader: {
+        position: 'fixed',
+        top: '0',
+        left: '0',
+        width: '100%',
+        backgroundColor: '#282c34',
+        height: '80px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: '36px',
+        color: 'white'
+    },
+    container: {
+        display: 'block',
+        color: '#282c34',
+        position: 'absolute',
+        top: '80px',
+        left: '260px',
+        width: 'calc(100% - 260px)',
+        minHeight: 'calc(100% - 80px)',
+        backgroundColor: '#f0f3f9'
+    }
+});
+
+function Layout({ children, classes }) {
+    return (
+        <div className={ classes.app }>
+            <header className={ classes.appHeader }>
+                <p>Управление запросами пользователей</p>
+            </header>
+            <LeftDrawer />
+            <div className={ classes.container }>
+                { children }
+            </div>
+        </div>
+    );
 }
 
-export default Layout;
+export default withStyles(styles)(Layout);
