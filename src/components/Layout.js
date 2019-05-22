@@ -18,7 +18,7 @@ const styles = theme => ({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        fontSize: '36px',
+        fontSize: '30px',
         color: 'white'
     },
     container: {
