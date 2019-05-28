@@ -18,8 +18,8 @@ const styles = theme => ({
     card: {
         backgroundColor: '#ffffff',
         padding: '16px 26px',
-        border: '1px solid #eaeaea',
-        borderRadius: '3px',
+        borderRadius: '8px',
+        boxShadow: '0 4px 16px rgba(0,0,0,.1)',
         margin: '10px 20px',
         display: 'flex',
         alignItems: 'center'

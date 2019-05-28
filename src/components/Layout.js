@@ -12,7 +12,7 @@ const styles = theme => ({
         top: '0',
         left: '0',
         width: '100%',
-        backgroundColor: '#282c34',
+        backgroundColor: '#273EAE',
         height: '80px',
         display: 'flex',
         flexDirection: 'column',
@@ -29,7 +29,7 @@ const styles = theme => ({
         left: '260px',
         width: 'calc(100% - 260px)',
         minHeight: 'calc(100% - 80px)',
-        backgroundColor: '#f0f3f9'
+        background: 'linear-gradient(#B7BECE ,#f0f3f9)'
     }
 });
 

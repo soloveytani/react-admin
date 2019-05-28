@@ -3,20 +3,35 @@ import { withStyles } from '@material-ui/core/styles';
 import { TextField, Button, Typography, Paper  } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { login }  from '../actions';
-import '../App.scss';
+import backImage from '../images/ilustracion-clinicas-1.png';
 
 const styles = theme => ({
     form: {
-        width: '420px',
-        maxWidth: '100%',
-        margin: '0 auto',
+        width: '100%',
         textAlign: 'center',
         minHeight: '100vh',
         display: 'flex',
-        alignItems: 'center'
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative'
+    },
+    image: {
+        position: 'absolute',
+        top: '50%',
+        right: '50%',
+        height: '700px',
+        transform: 'translate(calc(50% + 330px), calc(-50% - 160px))'
     },
     loginForm: {
         padding: '26px',
+        width: '420px',
+        maxWidth: 'calc(100% - 20px)',
+        boxShadow: '0 4px 16px rgba(0,0,0,.3)',
+        boxSizing: 'border-box'
+    },
+    title: {
+        fontWeight: '500',
+        color: '#314175'
     },
     input: {
         width: '100%'
@@ -63,8 +78,9 @@ class LoginForm extends Component {
         const { classes } = this.props;
         return (
             <div className={ classes.form }>
+                <img src={ backImage } alt="" className={ classes.image } />
                 <Paper className={classes.loginForm}>
-                    <Typography variant="h5" gutterBottom color="textSecondary">Пожалуйста, войдите в систему</Typography>
+                    <Typography variant="h5" gutterBottom className={ classes.title }>Пожалуйста, войдите в систему</Typography>
                     <TextField
                     className={ classes.input }
                     id="outlined-name"
@@ -83,7 +99,7 @@ class LoginForm extends Component {
                     margin="normal"
                     variant="outlined"
                     />
-                    <Button onClick={ this.submitButton } variant="contained" color="primary" className={ classes.submitButton }>
+                    <Button onClick={ this.submitButton } variant="contained" color="secondary" className={ classes.submitButton }>
                         Войти
                     </Button>
                 </Paper>

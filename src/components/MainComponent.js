@@ -11,7 +11,7 @@ import { login }  from '../actions';
 
 const styles = theme => ({
     container: {
-        backgroundColor: '#f0f3f9'
+        background: 'linear-gradient(#B7BECE ,#f0f3f9)'
     }
 })
 

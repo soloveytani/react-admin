@@ -6,10 +6,14 @@ import { Drawer, List, ListItem, Divider, Typography } from '@material-ui/core';
 const styles = theme => ({
     drawer: {
         width: '260px',
-        marginTop: '80px'
+        marginTop: '80px',
+        background: '#5B7DEB'
     },
     menuItem: {
-        textDecoration: 'none'
+        textDecoration: 'none',
+    },
+    menuText: {
+        color: '#ffffff'
     }
 });
 
@@ -50,7 +54,7 @@ class LeftDrawer extends Component {
                             <div key={ link.link }>
                                 <Link to={ link.link } className={ classes.menuItem }>
                                     <ListItem button>
-                                        <Typography variant="h6" gutterBottom>
+                                        <Typography variant="h6" gutterBottom className={classes.menuText}>
                                             { link.title }
                                         </Typography>
                                     </ListItem>
