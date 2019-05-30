@@ -27,7 +27,8 @@ const styles = theme => ({
         width: '420px',
         maxWidth: 'calc(100% - 20px)',
         boxShadow: '0 4px 16px rgba(0,0,0,.3)',
-        boxSizing: 'border-box'
+        boxSizing: 'border-box',
+        borderRadius: '8px'
     },
     title: {
         fontWeight: '500',

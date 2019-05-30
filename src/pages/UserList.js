@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
+import classNames from 'classnames';
 import { Typography, IconButton, Fab } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
@@ -59,6 +60,9 @@ const styles = theme => ({
         position: 'fixed',
         bottom: '60px',
         right: '60px'
+    },
+    orangeButton: {
+        color: '#F7A033'
     }
 });
 class UserList extends Component {
@@ -86,7 +90,7 @@ class UserList extends Component {
                         </div>
                         <div className={ classes.rightColumn }>
                             <UserEditDialog title="Редактирование пользователя" type="edit" user={ user }>
-                                <IconButton className={classes.button} aria-label="Delete" color="primary">
+                                <IconButton className={classNames(classes.button, classes.orangeButton)} aria-label="Edit">
                                     <EditIcon />
                                 </IconButton>
                             </UserEditDialog>

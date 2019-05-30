@@ -1,16 +1,26 @@
 import React, { Component } from 'react';
+import { withStyles} from '@material-ui/core/styles';
 import DragAndDropBoard from '../components/DragAndDropBoard';
-import '../App.scss';
+
+const styles = theme => ({
+    container: {
+        margin: '30px',
+        display: 'block',
+        color: '#282c34'
+    }
+});
 
 class Home extends Component {
     render() {
+
+        const { classes } = this.props;
+
         return (
-            <div className="Container">
-                <h1>Home</h1>
+            <div className={ classes.container }>
                 <DragAndDropBoard />
             </div>
         );
     };
 };
 
-export default Home;
+export default withStyles(styles)(Home);

@@ -65,9 +65,6 @@ class LeftDrawer extends Component {
                         </List>
                     </div>
                 </Drawer>
-                {/* <Link to="/users">Users</Link>
-                <Link to="/requests">Requests</Link>
-                <Link to="/login">Log out</Link> */}
             </div>
         );
     }

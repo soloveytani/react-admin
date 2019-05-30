@@ -13,34 +13,44 @@ const styles = theme => ({
     list: {
         display: 'flex',
         flexDirection: 'column',
-        width: '300px',
+        width: '33%',
         padding: '26px',
         margin: '0 10px',
-        backgroundColor: '#ffffff',
-        borderRadius: '3px',
+        backgroundColor: '#5B7DEB',
+        borderRadius: '8px',
         fontFamily: "'Rubik', sans-serif",
-        boxShadow: '0px 1px 5px 0px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 3px 1px -2px rgba(0,0,0,0.12)'
     },
     title: {
         fontSize: '16px',
         fontWeight: '500',
-        margin: '10px 0 10px 26px',
-        textAlign: 'left'
+        margin: '0 0 10px 0',
+        textAlign: 'left',
+        color: '#ffffff'
     },
     card: {
         backgroundColor: '#ffffff',
-        color: '#1c1e24',
         padding: '16px 26px',
-        border: '1px solid rgba(0, 0, 0, 0.23)',
         borderRadius: '5px',
         margin: '10px 0',
         display: 'flex',
         flexDirection: 'column',
         fontSize: '14px',
         textAlign: 'left',
+        boxShadow: '0 4px 16px rgba(0,0,0,.3)',
         '&:hover': {
-            borderColor: 'rgba(0, 0, 0, 0.87)'
+            backgroundColor: '#e6e6e6',
+            '& $date':
+            {
+                color: '#03a9f4'
+            }
         } 
+    },
+    cardTitle: {
+        color: '#273eae',
+        fontWeight: '500'
+    },
+    date: {
+        color: '#03a9f4'
     },
     selectedCard: {
         '-o-transform': 'skew(-20deg, 20deg)',
@@ -156,8 +166,8 @@ class DragAndDropBoard extends Component {
                                                 className={ classNames(classes.card,
                                                 snapshot.isDragging ? classes.selectedCard : '')}
                                             >
-                                                <Typography variant="body1" color="primary">{ item.text }</Typography>
-                                                <Typography variant="subtitle2">{ item.date }</Typography>
+                                                <Typography variant="body1" className={ classes.cardTitle }>{ item.text }</Typography>
+                                                <Typography variant="subtitle2" className={ classes.date }>{ item.date }</Typography>
                                             </div>
                                         )}
                                     </Draggable>
@@ -186,8 +196,8 @@ class DragAndDropBoard extends Component {
                                                 className={ classNames(classes.card,
                                                 snapshot.isDragging ? classes.selectedCard : '')}
                                             >
-                                                <Typography variant="body1" color="primary">{ item.text }</Typography>
-                                                <Typography variant="subtitle2">{ item.date }</Typography>
+                                                <Typography variant="body1" className={ classes.cardTitle }>{ item.text }</Typography>
+                                                <Typography variant="subtitle2" className={ classes.date }>{ item.date }</Typography>
                                             </div>
                                         )}
                                     </Draggable>
@@ -216,8 +226,8 @@ class DragAndDropBoard extends Component {
                                                 className={ classNames(classes.card,
                                                 snapshot.isDragging ? classes.selectedCard : '')}
                                             >
-                                                <Typography variant="body1" color="primary">{ item.text }</Typography>
-                                                <Typography variant="subtitle2">{ item.date }</Typography>
+                                                <Typography variant="body1" className={ classes.cardTitle }>{ item.text }</Typography>
+                                                <Typography variant="subtitle2" className={ classes.date }>{ item.date }</Typography>
                                             </div>
                                         )}
                                     </Draggable>
