@@ -38,7 +38,7 @@ const styles = theme => ({
         textAlign: 'left',
         boxShadow: '0 4px 16px rgba(0,0,0,.3)',
         '&:hover': {
-            backgroundColor: '#e6e6e6',
+            backgroundColor: '#ecf0f6',
             '& $date':
             {
                 color: '#03a9f4'

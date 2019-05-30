@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import classNames from 'classnames';
 import { Typography, IconButton, Fab } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
 import AddIcon from '@material-ui/icons/Add';
 
 import UserEditDialog from '../components/UserEditDialog';
@@ -25,7 +23,11 @@ const styles = theme => ({
         boxShadow: '0 4px 16px rgba(0,0,0,.1)',
         margin: '10px 20px',
         display: 'flex',
-        alignItems: 'center'
+        alignItems: 'center',
+        '&:hover': {
+            cursor: 'pointer',
+            backgroundColor: '#ecf0f6',
+        }
     },
     firstColumn: {
         textAlign: 'left',
@@ -34,12 +36,16 @@ const styles = theme => ({
             margin: '6px 0'
         }
     },
+    userName: {
+        color: '#162159'
+    },
     secondColumn: {
         textAlign: 'left'
     },
     rightColumn: {
         marginLeft: 'auto',
-        display: 'flex'
+        display: 'flex',
+        alignItems: 'center'
     },
     room: {
         display: 'flex',
@@ -54,7 +60,8 @@ const styles = theme => ({
         }
     },
     phone: {
-        marginTop: '20px'
+        color: '#38c2cf',
+        marginRight: '30px'
     },
     fab: {
         position: 'fixed',
@@ -72,33 +79,36 @@ class UserList extends Component {
             <div className={ classes.container }>
                 {
                     USERS.map((user, index) =>
-                    <div key={ index } className={ classes.card }>
-                        <div className={ classes.firstColumn }>
-                            <Typography variant="h6">{ user.name } { user.surname }</Typography>
-                            <Typography variant="body1" color="primary">{ user.email }</Typography>
-                            <Typography variant="body1">{ user.phone }</Typography>
-                        </div>
-                        <div className={ classes.secondColumn }>
-                            <div className={ classes.room }>
-                                <img src="https://img.icons8.com/ios/50/000000/door-opened.png" alt=""/>
-                                <Typography variant="h5">{ user.room }</Typography>
+                    <UserEditDialog title="Редактирование пользователя" type="edit" user={ user } key={ index }>
+                        <div key={ index } className={ classes.card }>
+                            <div className={ classes.firstColumn }>
+                                <Typography variant="h6" className={ classes.userName }>{ user.name } { user.surname }</Typography>
+                                <Typography variant="body1" color="primary">{ user.email }</Typography>
+                                
                             </div>
-                            <div className={ classes.room }>
-                                <img src="https://img.icons8.com/ios/50/000000/contacts.png" alt=""/>
-                                <Typography variant="body2" color="primary">{ user.position }</Typography>
+                            <div className={ classes.secondColumn }>
+                                <div className={ classes.room }>
+                                    <img src="https://img.icons8.com/ios/50/000000/door-opened.png" alt=""/>
+                                    <Typography variant="h5" style={ {color: '#c055a6'} }>{ user.room }</Typography>
+                                </div>
+                                <div className={ classes.room }>
+                                    <img src="https://img.icons8.com/ios/50/000000/contacts.png" alt=""/>
+                                    <Typography variant="body2" color="primary">{ user.position }</Typography>
+                                </div>
                             </div>
-                        </div>
-                        <div className={ classes.rightColumn }>
-                            <UserEditDialog title="Редактирование пользователя" type="edit" user={ user }>
-                                <IconButton className={classNames(classes.button, classes.orangeButton)} aria-label="Edit">
-                                    <EditIcon />
+                            <div className={ classes.rightColumn }>
+                                {/* <UserEditDialog title="Редактирование пользователя" type="edit" user={ user }>
+                                    <IconButton className={classNames(classes.button, classes.orangeButton)} aria-label="Edit">
+                                        <EditIcon />
+                                    </IconButton>
+                                </UserEditDialog> */}
+                                <Typography variant="body1" className={ classes.phone }>{ user.phone }</Typography>
+                                <IconButton className={classes.button} aria-label="Delete" color="primary">
+                                    <DeleteIcon />
                                 </IconButton>
-                            </UserEditDialog>
-                            <IconButton className={classes.button} aria-label="Delete" color="primary">
-                                <DeleteIcon />
-                            </IconButton>
+                            </div>
                         </div>
-                    </div>
+                    </UserEditDialog>
                     )
                 }
                 <UserEditDialog title="Создание пользователя" type="create" user={ USER_SCTRUCTURE }>

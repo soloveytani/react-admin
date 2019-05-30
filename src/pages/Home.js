@@ -6,7 +6,8 @@ const styles = theme => ({
     container: {
         margin: '30px',
         display: 'block',
-        color: '#282c34'
+        color: '#282c34',
+        width: '100%'
     }
 });
 

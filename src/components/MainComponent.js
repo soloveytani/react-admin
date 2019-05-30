@@ -25,7 +25,7 @@ class MainComponent extends Component {
             <div className={ classes.container }>
                 <Route path="/login" exact component={ LoginForm } />
                 <Route path="/" exact component={ () => token ? <Layout><Home/></Layout> : <Redirect to="/login"/> }/>
-                <Route path="/users" component={ () => <Layout><UserList/></Layout>}/>
+                <Route path="/users" component={ () => token ? <Layout><UserList/></Layout> : <Redirect to="/login" /> }/>
                 <Route path="/requests" component={ () => token ? <Layout><RequestList/></Layout> : <Redirect to="/login"/> }/>
             </div>
         );
