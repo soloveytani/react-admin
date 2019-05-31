@@ -64,7 +64,7 @@ class LoginForm extends Component {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             },
-            body: JSON.stringify({"auth":{"login":"superadmin","password":"password"}})
+            body: JSON.stringify({"auth":{"login": this.state.login ,"password": this.state.password}})
         }).then(result => result.json())
           .then((result) => {
             // set login from form if you need
@@ -81,28 +81,31 @@ class LoginForm extends Component {
             <div className={ classes.form }>
                 <img src={ backImage } alt="" className={ classes.image } />
                 <Paper className={classes.loginForm}>
-                    <Typography variant="h5" gutterBottom className={ classes.title }>Пожалуйста, войдите в систему</Typography>
-                    <TextField
-                    className={ classes.input }
-                    id="outlined-name"
-                    label="Логин"
-                    value={this.state.login}
-                    onChange={this.handleChange('login')}
-                    margin="normal"
-                    variant="outlined"
-                    />
-                    <TextField
-                    className={ classes.input }
-                    id="outlined-name"
-                    label="Пароль"
-                    value={this.state.name}
-                    onChange={this.handleChange('password')}
-                    margin="normal"
-                    variant="outlined"
-                    />
-                    <Button onClick={ this.submitButton } variant="contained" color="secondary" className={ classes.submitButton }>
-                        Войти
-                    </Button>
+                    <form>
+                        <Typography variant="h5" gutterBottom className={ classes.title }>Пожалуйста, войдите в систему</Typography>
+                        <TextField
+                        className={ classes.input }
+                        id="outlined-name"
+                        label="Логин"
+                        value={this.state.login}
+                        onChange={this.handleChange('login')}
+                        margin="normal"
+                        variant="outlined"
+                        />
+                        <TextField
+                        type="password"
+                        className={ classes.input }
+                        id="outlined-password"
+                        label="Пароль"
+                        value={this.state.name}
+                        onChange={this.handleChange('password')}
+                        margin="normal"
+                        variant="outlined"
+                        />
+                        <Button onClick={ this.submitButton } variant="contained" color="secondary" className={ classes.submitButton }>
+                            Войти
+                        </Button>
+                    </form>
                 </Paper>
             </div>
 

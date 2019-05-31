@@ -3,21 +3,21 @@ export const TASKS = [
         user_id: '1',
         user_name: 'Вадим',
         user_surname: 'Ишхнели',
-        related_to: 'принтер',
+        related_to: 'Принтер',
         text: 'закончился цветной картридж',
         date: '22.02.2019',
         priority: 'middle',
-        status: 'In progress'
+        status: 'Необходимо сделать'
     },
     {
-        user_id: '1',
+        user_id: '2',
         user_name: 'Николай',
         user_surname: 'Баранов',
-        related_to: 'операционная система',
+        related_to: 'Операционная система',
         text: 'Необходимо переустановаить ОС',
         date: '13.05.2019',
         priority: 'high',
-        status: 'Need to do'
+        status: 'В работе'
     }
 ];
 
@@ -69,4 +69,13 @@ export const TASKS_IN_PROGRESS = [
         priority: 'low',
         status: 'Need to do'
     }
+];
+
+export const RELATED_TO = [
+    '-',
+    'Программное обеспечение',
+    'Операционная система',
+    'Интернет',
+    'Принтер',
+    'Авторизация',
 ];
