@@ -21,20 +21,27 @@ class UserEditDialog extends Component {
         user: USER_SCTRUCTURE
     };
 
-    componentDidMount = () => {
-        this.setState({ user: this.props.user })
-    };
-
     handleClickOpen = () => {
         this.setState({ open: true });
+        if (this.props.type === 'edit') this.setState({ user: this.props.user });
+        else this.setState({user: USER_SCTRUCTURE});
     };
 
     handleClose = () => {
         this.setState({ open: false });
     };
 
+    handleSubmit = () => {
+        this.props.onSubmit(this.props.type, this.state.user);
+        this.setState({ open: false });
+    };
+
     handleChange = (fieldName) => event => {
         this.setState({ user: { ...this.state.user, [fieldName]: event.target.value }});
+    };
+
+    handleChangeCheckbox = (fieldName) => event => {
+        this.setState({ user: { ...this.state.user, [fieldName]: event.target.checked }});
     };
 
     render() {
@@ -58,14 +65,16 @@ class UserEditDialog extends Component {
                             value={ user[field.name] }
                             label={ field.label }
                             type={ field.type }
+                            options={ field.options }
                             handleChange={ this.handleChange }
+                            handleChangeCheckbox={ this.handleChangeCheckbox }
                         />
                     )
                 }
                 
             </DialogContent>
             <DialogActions className={ classes.dialogActions }>
-                <Button onClick={this.handleClose} color="primary" variant="contained">
+                <Button onClick={this.handleSubmit} color="primary" variant="contained">
                     {type === 'edit' ? 'Сохранить' : 'Добавить'}
                 </Button>
                 <Button onClick={this.handleClose} color="primary" variant="contained">

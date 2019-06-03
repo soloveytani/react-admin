@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { TextField, Button, Typography, Paper  } from '@material-ui/core';
 import { connect } from 'react-redux';
-import { login }  from '../actions';
+import { auth }  from '../actions';
 import backImage from '../images/ilustracion-clinicas-1.png';
 
 const styles = theme => ({
@@ -67,9 +67,7 @@ class LoginForm extends Component {
             body: JSON.stringify({"auth":{"login": this.state.login ,"password": this.state.password}})
         }).then(result => result.json())
           .then((result) => {
-            // set login from form if you need
-            this.props.login('superadmin');
-            // save response.jwt where you need
+            this.props.auth({token: result.jwt});
             this.props.history.push('/users');
           })
           .catch(err => console.error(err));
@@ -113,4 +111,4 @@ class LoginForm extends Component {
     };
 };
 
-export default withStyles(styles)(connect(mapStateToProps, { login })(LoginForm));
+export default withStyles(styles)(connect(mapStateToProps, { auth })(LoginForm));

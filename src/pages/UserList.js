@@ -5,9 +5,11 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
 import FilterIcon from '@material-ui/icons/FilterList';
 import ClearIcon from '@material-ui/icons/Clear';
+import { connect } from 'react-redux';
+import { auth }  from '../actions';
 
 import UserEditDialog from '../components/UserEditDialog';
-import { USERS, USER_SCTRUCTURE, POSITIONS } from '../fixtures/users';
+import { USER_SCTRUCTURE, POSITIONS } from '../fixtures/users';
 
 const styles = theme => ({
     container: {
@@ -95,13 +97,75 @@ const styles = theme => ({
         color: '#F7A033'
     }
 });
+
+const mapStateToProps = ({ auth: {token}}) => {
+    return { token }
+};
 class UserList extends Component {
 
     state = {
         roomFilter: '',
         position: '-',
-        userList: USERS,
-        filteredUserList: USERS
+        userList: [],
+        filteredUserList: [],
+        positionOptions: POSITIONS
+    };
+
+    getUserList = () => {
+        fetch(`https://tatiana-backend.herokuapp.com/users`,{
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + this.props.token
+            }
+        }).then(result => result.json())
+          .then((result) => {
+            this.setState({userList: result, filteredUserList: result})
+        }).catch(err => console.error(err));
+    };
+
+    createUpdateUser = (type, userInfo) => {
+        let url = `https://tatiana-backend.herokuapp.com/users` + (type === 'edit' ? `/${userInfo.id}` : '');
+        fetch(url,{
+            method: type === 'edit' ? "PUT" : "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + this.props.token
+            },
+            body: JSON.stringify({
+                user: userInfo
+            })
+        }).then(result => result.json())
+        .then( () => {
+            this.getUserList();
+        }).catch(err => console.error(err));
+    };
+
+    deleteUser = (userId) => (event) => {
+        event.stopPropagation();
+        let url = `https://tatiana-backend.herokuapp.com/users/` + userId;
+        fetch(url, {
+            method: "DELETE",
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + this.props.token
+            }
+        }).then()
+        .then( () => {
+            this.getUserList();
+        }).catch(err => console.error(err));
+    };
+
+    handleSubmit = (type, userInfo ) => {
+        this.createUpdateUser(type, userInfo);
+    };
+
+    componentDidMount = () => {
+        this.getUserList();
+        this.setState({positionOptions: ['-', ...this.state.positionOptions]});
     };
 
     handleChange = (fieldName) => (event) => {
@@ -126,20 +190,15 @@ class UserList extends Component {
         })
     };
 
-    deleteUser = (userId) => (event) => {
-        event.stopPropagation();
-        console.log('delete user ', userId);
-    };
-
     render() {
         const { classes } = this.props;
-        const { roomFilter, position, filteredUserList } = this.state;
+        const { roomFilter, position, filteredUserList, positionOptions } = this.state;
         return (
             <div className={ classes.container }>
                 <div className={ classes.filtration }>
                     <TextField
                         id="outlined-number"
-                        label="Кабинет"
+                        label="Отделение"
                         value={ roomFilter }
                         onChange={ this.handleChange('roomFilter') }
                         type="number"
@@ -157,7 +216,7 @@ class UserList extends Component {
                         margin="normal"
                         variant="outlined"
                     >
-                        {POSITIONS.map(position => (
+                        {positionOptions.map(position => (
                             <MenuItem key={position} value={position}>
                                 {position}
                             </MenuItem>
@@ -173,36 +232,36 @@ class UserList extends Component {
                 </div>
                 <div className={ classes.list }>
                     {
-                        filteredUserList.map((user, index) =>
-                        <UserEditDialog title="Редактирование пользователя" type="edit" user={ user } key={ index }>
-                            <div key={ index } className={ classes.card }>
-                                <div className={ classes.firstColumn }>
-                                    <Typography variant="h6" className={ classes.userName }>{ user.name } { user.surname }</Typography>
-                                    <Typography variant="body1" color="primary">{ user.email }</Typography>
-                                    
-                                </div>
-                                <div className={ classes.secondColumn }>
-                                    <div className={ classes.room }>
-                                        <img src="https://img.icons8.com/ios/50/000000/door-opened.png" alt=""/>
-                                        <Typography variant="h5" style={ {color: '#c055a6'} }>{ user.room }</Typography>
+                        filteredUserList.map((user, index) => (
+                            !user.superadmin && 
+                            <UserEditDialog title="Редактирование пользователя" type="edit" user={ user } key={ index } onSubmit={ this.handleSubmit }>
+                                <div key={ index } className={ classes.card }>
+                                    <div className={ classes.firstColumn }>
+                                        <Typography variant="h6" className={ classes.userName }>{ user.name } { user.surname }</Typography>
+                                        <Typography variant="body1" color="primary">{ user.email }</Typography>
                                     </div>
-                                    <div className={ classes.room }>
-                                        <img src="https://img.icons8.com/ios/50/000000/contacts.png" alt=""/>
-                                        <Typography variant="body2" color="primary">{ user.position }</Typography>
+                                    <div className={ classes.secondColumn }>
+                                        <div className={ classes.room }>
+                                            <img src="https://img.icons8.com/ios/50/000000/door-opened.png" alt=""/>
+                                            <Typography variant="h5" style={ {color: '#c055a6'} }>{ user.room }</Typography>
+                                        </div>
+                                        <div className={ classes.room }>
+                                            <img src="https://img.icons8.com/ios/50/000000/contacts.png" alt=""/>
+                                            <Typography variant="body2" color="primary">{ user.position }</Typography>
+                                        </div>
+                                    </div>
+                                    <div className={ classes.rightColumn }>
+                                        <Typography variant="body1" className={ classes.phone }>{ user.phone }</Typography>
+                                        <IconButton className={classes.button} aria-label="Delete" color="primary" onClick={ this.deleteUser(user.id) }>
+                                            <DeleteIcon />
+                                        </IconButton>
                                     </div>
                                 </div>
-                                <div className={ classes.rightColumn }>
-                                    <Typography variant="body1" className={ classes.phone }>{ user.phone }</Typography>
-                                    <IconButton className={classes.button} aria-label="Delete" color="primary" onClick={ this.deleteUser(user.id) }>
-                                        <DeleteIcon />
-                                    </IconButton>
-                                </div>
-                            </div>
-                        </UserEditDialog>
-                        )
+                            </UserEditDialog>
+                        ))
                     }
                 </div>
-                <UserEditDialog title="Создание пользователя" type="create" user={ USER_SCTRUCTURE }>
+                <UserEditDialog title="Создание пользователя" type="create" user={ USER_SCTRUCTURE } onSubmit={ this.handleSubmit }>
                     <Fab color="secondary" aria-label="Add" className={classes.fab}>
                         <AddIcon />
                     </Fab>
@@ -212,10 +271,4 @@ class UserList extends Component {
     };
 };
 
-export default withStyles(styles)(UserList);
-
-/* <UserEditDialog title="Редактирование пользователя" type="edit" user={ user }>
-                                        <IconButton className={classNames(classes.button, classes.orangeButton)} aria-label="Edit">
-                                            <EditIcon />
-                                        </IconButton>
-                                    </UserEditDialog> */
+export default withStyles(styles)(connect(mapStateToProps, { auth })(UserList));

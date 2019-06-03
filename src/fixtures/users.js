@@ -46,6 +46,31 @@ export const USERS = [
     }
 ];
 
+export const POSITIONS = [
+    'Терапевт',
+    'Педиатр',
+    'Дерматовенеролог',
+    'Хирург',
+    'Ортопед-травматолог',
+    'Офтальмолог',
+    'Оториноларинголог',
+    'Гастроэнтеролог',
+    'Эндокринолог',
+    'Невролог',
+    'Гинеколог',
+    'Аллерголог-иммунолог',
+    'Инфекционист',
+    'Уролог',
+    'Психотерапевт',
+    'Психолог',
+    'ЛОР',
+    'Врач функциональной диагностики',
+    'Кардиолог',
+    'Маммолог/ Онколог',
+    'Физиотерапевт',
+    'Медицинский сотрудник',
+];
+
 export const USER_FIELDS = [
     {
         name: 'name',
@@ -69,47 +94,53 @@ export const USER_FIELDS = [
     },
     {
         name: 'position',
-        type: 'textInput',
-        label: 'Должность'
+        type: 'select',
+        label: 'Должность',
+        options: POSITIONS
     },
     {
         name: 'room',
         type: 'numberInput',
         label: 'Кабинет'
+    },
+    {
+        name: 'info',
+        type: 'textArea',
+        label: 'Доп. информация'
+    },
+    {
+        name: 'admin',
+        type: 'checkbox',
+        label: 'Администратор'
+    },
+    {
+        name: 'login',
+        type: 'textInput',
+        label: 'Логин'
+    },
+    {
+        name: 'password',
+        type: 'password',
+        label: 'Пароль'
+    },
+    {
+        name: 'password_confirmation',
+        type: 'password',
+        label: 'Подтверждение пароля'
     }
 ];
 
 export const USER_SCTRUCTURE = {
+    admin: false,
+    login: '',
+    info: '',
+    password: '',
+    password_confirmation: '',
+    superadmin: false,
     name: '',
     surname: '',
-    email: '',
     phone: '',
+    email: '',
     position: '',
-    room: ''
+    room: '',
 };
-
-export const POSITIONS = [
-    '-',
-    'Терапевт',
-    'Педиатр',
-    'Дерматовенеролог',
-    'Хирург',
-    'Ортопед-травматолог',
-    'Офтальмолог',
-    'Оториноларинголог',
-    'Гастроэнтеролог',
-    'Эндокринолог',
-    'Невролог',
-    'Гинеколог',
-    'Аллерголог-иммунолог',
-    'Инфекционист',
-    'Уролог',
-    'Психотерапевт',
-    'Психолог',
-    'ЛОР',
-    'Врач функциональной диагностики',
-    'Кардиолог',
-    'Маммолог/ Онколог',
-    'Физиотерапевт',
-    'Медицинский сотрудник',
-]

@@ -1,6 +1,6 @@
 import React from 'react';
 import {withStyles} from "@material-ui/core/styles/index";
-import { TextField } from '@material-ui/core';
+import { TextField, MenuItem, Checkbox, FormControlLabel, Divider } from '@material-ui/core';
 import { PhoneMask } from './MaskComponents'; 
 
 const styles = theme => ({
@@ -13,20 +13,39 @@ const styles = theme => ({
         margin: '0 3px 14px 3px',
         paddingTop: 16,
     },
+    checkbox: {
+        marginTop: '4px'
+    }
 });
 
-const DialogTextField = ({handleChange, classes, name, label, value, type }) => {
+const DialogTextField = ({handleChange, handleChangeCheckbox, classes, name, label, value, type, options }) => {
+    if (type === 'checkbox') return (
+    <>
+        <FormControlLabel className={ classes.checkbox }
+            control={<Checkbox onChange={ handleChangeCheckbox(name) } value={ name } checked={ value || false }/>} label={ label } />
+        <Divider style={ {marginBottom: '20px'} } />
+    </>
+    );
     return (
         <TextField
-        id={ name }
-        label={ label }
-        className={ classes.textField }
-        margin="dense"
-        variant="outlined"
-        value={ value }
-        onChange={ handleChange(name) }
-        InputProps={ type === 'phone' ? { inputComponent: PhoneMask } : {} }
-        />
+            select={ type === 'select'}
+            multiline={ type === 'textArea'}
+            rowsMax="3"
+            id={ name }
+            label={ label }
+            className={ classes.textField }
+            margin="dense"
+            variant="outlined"
+            value={ value || '' }
+            onChange={ handleChange(name) }
+            InputProps={ type === 'phone' ? { inputComponent: PhoneMask } : {} }
+        >
+            { type === 'select' && options.map( option => (
+                <MenuItem key={option} value={option}>
+                    {option}
+                </MenuItem>
+            )) }
+        </TextField>
     );
 };
 

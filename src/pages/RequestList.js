@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Typography, IconButton, TextField, MenuItem, Button } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
 import FilterIcon from '@material-ui/icons/FilterList';
 import ClearIcon from '@material-ui/icons/Clear';
+import { connect } from 'react-redux';
+import { auth }  from '../actions';
 
-import { TASKS, RELATED_TO } from '../fixtures/tasks';
+import { TASKS, RELATED_TO, ISSUE_TOPICS_NAME } from '../fixtures/tasks';
 import { USERS } from '../fixtures/users';
 
 const styles = theme => ({
@@ -46,11 +47,15 @@ const styles = theme => ({
         boxShadow: '0 4px 16px rgba(0,0,0,.1)',
         margin: '10px 20px',
         display: 'flex',
-        alignItems: 'center'
+        alignItems: 'center',
+        '&:hover': {
+            cursor: 'pointer',
+            backgroundColor: '#ecf0f6',
+        }
     },
     firstColumn: {
         textAlign: 'left',
-        width: '240px',
+        width: '340px',
         '& p': {
             margin: '6px 0'
         }
@@ -58,12 +63,20 @@ const styles = theme => ({
     secondColumn: {
         textAlign: 'left'
     },
+    needToDo: {
+        width: '14px',
+        height: '14px',
+        borderRadius: '50%',
+        background: '#F7A033'
+    },
     rightColumn: {
         marginLeft: 'auto',
+        alignItems: 'center',
         display: 'flex'
     },
-    phone: {
-        marginTop: '20px'
+    date: {
+        color: '#38c2cf',
+        marginRight: '30px'
     },
     fab: {
         position: 'fixed',
@@ -71,6 +84,10 @@ const styles = theme => ({
         right: '60px'
     }
 });
+
+const mapStateToProps = ({ auth: {token}}) => {
+    return { token }
+};
 class RequestList extends Component {
 
     state = {
@@ -86,7 +103,22 @@ class RequestList extends Component {
         let userOptions = USERS.map((user) => ({value: user.id, label: user.name + ' ' + user.surname}) );
         userOptions.unshift({value: '-', label: '-'})
         this.setState({userOptions: userOptions});
+        this.getIssues();
     }; 
+
+    getIssues = () => {
+        fetch(`https://tatiana-backend.herokuapp.com/issues`,{
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + this.props.token
+            }
+        }).then(result => result.json())
+          .then((result) => {
+            this.setState({requestList: result, filteredRequestList: result})
+        }).catch(err => console.error(err));
+    };
 
     handleChange = (fieldName) => (event) => {
         this.setState({ [fieldName]: event.target.value });
@@ -181,18 +213,16 @@ class RequestList extends Component {
                     filteredRequestList.map((task, index) =>
                     <div key={ index } className={ classes.card }>
                         <div className={ classes.firstColumn }>
-                            <Typography variant="h6">{ task.user_name } { task.user_surname }</Typography>
-                            <Typography variant="body1" color="primary">{ task.related_to }</Typography>
-                            <Typography variant="body1">{ task.date }</Typography>
+                            <Typography variant="h6">{ ISSUE_TOPICS_NAME[task.related_to] }</Typography>
+                            <Typography variant="body1" color="primary">{ task.commentary }</Typography>
                         </div>
                         <div className={ classes.secondColumn }>
-                            <Typography variant="h5">{ task.text }</Typography>
-                            <Typography variant="body2" color="primary">{ task.priority }</Typography>
+                            {/* <Typography variant="h5">{ task.text }</Typography> */}
+                            <div className={ classes[task.status] } />
+                            {/* <Typography variant="body2" color="primary">{ task.status }</Typography> */}
                         </div>
                         <div className={ classes.rightColumn }>
-                            <IconButton className={classes.button} aria-label="Delete" color="primary">
-                                <EditIcon />
-                            </IconButton>
+                            <Typography variant="body1" className={ classes.date }>{ task.created_at }</Typography>
                             <IconButton className={classes.button} aria-label="Delete" color="primary">
                                 <DeleteIcon />
                             </IconButton>
@@ -205,4 +235,5 @@ class RequestList extends Component {
     };
 };
 
-export default withStyles(styles)(RequestList);
+
+export default withStyles(styles)(connect(mapStateToProps, { auth })(RequestList));

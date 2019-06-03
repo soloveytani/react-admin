@@ -7,7 +7,7 @@ import UserList from '../pages/UserList';
 import RequestList from '../pages/RequestList';
 import LoginForm from '../pages/LoginForm';
 import { connect } from 'react-redux';
-import { login }  from '../actions';
+import { auth }  from '../actions';
 
 const styles = theme => ({
     container: {
@@ -32,4 +32,4 @@ class MainComponent extends Component {
     };
 };
 
-export default withStyles(styles)(connect(mapStateToProps, { login })(MainComponent));
+export default withStyles(styles)(connect(mapStateToProps, { auth })(MainComponent));
