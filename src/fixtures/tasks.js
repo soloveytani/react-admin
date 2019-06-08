@@ -1,26 +1,3 @@
-export const TASKS = [
-    {
-        user_id: '1',
-        user_name: 'Вадим',
-        user_surname: 'Ишхнели',
-        related_to: 'Принтер',
-        text: 'закончился цветной картридж',
-        date: '22.02.2019',
-        priority: 'middle',
-        status: 'Необходимо сделать'
-    },
-    {
-        user_id: '2',
-        user_name: 'Николай',
-        user_surname: 'Баранов',
-        related_to: 'Операционная система',
-        text: 'Необходимо переустановаить ОС',
-        date: '13.05.2019',
-        priority: 'high',
-        status: 'В работе'
-    }
-];
-
 export const TASKS_NEED_TO_DO = [
     {
         id: 1,
@@ -116,3 +93,34 @@ export const ISSUE_STATUS = {
     'inProgress': 'В работе',
     'done': 'Готово'
 };
+
+export const ISSUE_STATUS_OPTIONS = [
+    {
+        label: 'Необходимо сделать',
+        value: 'needToDo'
+    },
+    {
+        label: 'В работе',
+        value: 'inProgress'
+    },
+    {
+        label: 'Готово',
+        value: 'done'
+    }
+];
+
+
+export const PRIORITY_OPTIONS = [
+    {
+        label: 'Низкий',
+        value: 'low'
+    },
+    {
+        label: 'Средний',
+        value: 'normal'
+    },
+    {
+        label: 'Высокий',
+        value: 'high'
+    }
+];

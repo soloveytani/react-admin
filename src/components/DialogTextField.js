@@ -8,11 +8,6 @@ const styles = theme => ({
         width: '100%',
         margin: '14px 0 4px'
     },
-    autoComplete: {
-        height: 50,
-        margin: '0 3px 14px 3px',
-        paddingTop: 16,
-    },
     checkbox: {
         marginTop: '4px'
     }

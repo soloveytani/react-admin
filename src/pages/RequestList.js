@@ -7,8 +7,9 @@ import ClearIcon from '@material-ui/icons/Clear';
 import { connect } from 'react-redux';
 import { auth }  from '../actions';
 
-import { TASKS, RELATED_TO, ISSUE_TOPICS_NAME } from '../fixtures/tasks';
+import { RELATED_TO, ISSUE_TOPICS_NAME } from '../fixtures/tasks';
 import { USERS } from '../fixtures/users';
+import IssueEditDialog from '../components/IssueEditDialog';
 
 const styles = theme => ({
     container: {
@@ -69,6 +70,18 @@ const styles = theme => ({
         borderRadius: '50%',
         background: '#F7A033'
     },
+    inProgress: {
+        width: '14px',
+        height: '14px',
+        borderRadius: '50%',
+        background: '#7044ff'
+    },
+    done: {
+        width: '14px',
+        height: '14px',
+        borderRadius: '50%',
+        background: '#10dc60'
+    },
     rightColumn: {
         marginLeft: 'auto',
         alignItems: 'center',
@@ -94,8 +107,8 @@ class RequestList extends Component {
         statusFilter: '-',
         userFilter: '-',
         relatedToFilter: '-',
-        requestList: TASKS,
-        filteredRequestList: TASKS,
+        requestList: [],
+        filteredRequestList: [],
         userOptions: []
     };
 
@@ -143,6 +156,25 @@ class RequestList extends Component {
             relatedToFilter: '-',
             filteredRequestList: this.state.requestList
         })
+    };
+
+    handleSubmit = ( issue ) => {
+        console.log(issue);
+        let url = `https://tatiana-backend.herokuapp.com/issues/` + issue.id;
+        fetch(url,{
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + this.props.token
+            },
+            body: JSON.stringify({
+                issue: issue
+            })
+        }).then(result => result.json())
+        .then( () => {
+            this.getIssues();
+        }).catch(err => console.error(err));
     };
 
     render() {
@@ -210,24 +242,24 @@ class RequestList extends Component {
                     </Button>
                 </div>
                 {
-                    filteredRequestList.map((task, index) =>
-                    <div key={ index } className={ classes.card }>
-                        <div className={ classes.firstColumn }>
-                            <Typography variant="h6">{ ISSUE_TOPICS_NAME[task.related_to] }</Typography>
-                            <Typography variant="body1" color="primary">{ task.commentary }</Typography>
-                        </div>
-                        <div className={ classes.secondColumn }>
-                            {/* <Typography variant="h5">{ task.text }</Typography> */}
-                            <div className={ classes[task.status] } />
-                            {/* <Typography variant="body2" color="primary">{ task.status }</Typography> */}
-                        </div>
-                        <div className={ classes.rightColumn }>
-                            <Typography variant="body1" className={ classes.date }>{ task.created_at }</Typography>
-                            <IconButton className={classes.button} aria-label="Delete" color="primary">
-                                <DeleteIcon />
-                            </IconButton>
-                        </div>
-                    </div>
+                    filteredRequestList.map((issue, index) =>
+                        <IssueEditDialog issue={ issue } key={ index } onSubmit={ this.handleSubmit }>
+                            <div key={ index } className={ classes.card }>
+                                <div className={ classes.firstColumn }>
+                                    <Typography variant="h6">{ ISSUE_TOPICS_NAME[issue.related_to] }</Typography>
+                                    <Typography variant="body1" color="primary">{ issue.commentary }</Typography>
+                                </div>
+                                <div className={ classes.secondColumn }>
+                                    <div className={ classes[issue.status] } />
+                                </div>
+                                <div className={ classes.rightColumn }>
+                                    <Typography variant="body1" className={ classes.date }>{ issue.created_at }</Typography>
+                                    <IconButton className={classes.button} aria-label="Delete" color="primary">
+                                        <DeleteIcon />
+                                    </IconButton>
+                                </div>
+                            </div>
+                        </IssueEditDialog >
                     )
                 }
             </div>
