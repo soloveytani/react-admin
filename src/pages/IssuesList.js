@@ -5,7 +5,7 @@ import { Typography, IconButton, TextField, MenuItem, Button } from '@material-u
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterIcon from '@material-ui/icons/FilterList';
 import ClearIcon from '@material-ui/icons/Clear';
-import ArrowUpwardIcon from '@material-ui/icons/Report';
+import PriorityIcon from '@material-ui/icons/Report';
 import { connect } from 'react-redux';
 import { auth }  from '../actions';
 
@@ -301,7 +301,7 @@ class IssuesList extends Component {
                                     <div className={ classNames( classes.status, classes[issue.status]) }>{ ISSUE_STATUS[issue.status] }</div>
                                 </div>
                                 <div className={ classes.rightColumn }>
-                                    <ArrowUpwardIcon className={ classes[issue.priority] } />
+                                    <PriorityIcon className={ classes[issue.priority] } />
                                     <Typography variant="body1" className={ classes.date }>{ issue.created_at.slice(0,10) }</Typography>
                                     <IconButton className={classes.button} aria-label="Delete" color="primary" onClick={ this.deleteIssue(issue.id) }>
                                         <DeleteIcon />

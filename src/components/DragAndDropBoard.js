@@ -2,8 +2,11 @@ import React, { Component } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { withStyles } from '@material-ui/core/styles';
 import { Typography } from '@material-ui/core';
+import PriorityIcon from '@material-ui/icons/Report';
 import classNames from 'classnames';
-import { TASKS_NEED_TO_DO, TASKS_IN_PROGRESS } from '../fixtures/tasks';
+import { connect } from 'react-redux';
+import { auth }  from '../actions';
+import { ISSUE_TOPICS_NAME } from '../fixtures/tasks';
 
 const styles = theme => ({
     container: {
@@ -32,7 +35,6 @@ const styles = theme => ({
         padding: '16px 26px',
         borderRadius: '5px',
         margin: '10px 0',
-        display: 'flex',
         flexDirection: 'column',
         fontSize: '14px',
         textAlign: 'left',
@@ -58,8 +60,33 @@ const styles = theme => ({
         '-moz-transform': 'skew(-20deg, 20deg)',
         '-webkit-transform': 'skew(-20deg, 20deg)',
         'transform': 'skew(-20deg, 20deg)'
+    },
+    low: {
+        float: 'right',
+        marginRight: '-10px',
+        '& path':{
+            color: '#99cc33'
+        }
+    },
+    normal: {
+        float: 'right',
+        marginRight: '-10px',
+        '& path':{
+            color: '#ffd31a'
+        }
+    },
+    high: {
+        float: 'right',
+        marginRight: '-10px',
+        '& path':{
+            color: '#d33939'
+        }
     }
 });
+
+const mapStateToProps = ({ auth: {token}}) => {
+    return { token }
+};
 
 const reorder = (list, startIndex, endIndex) => {
     const result = Array.from(list);
@@ -85,15 +112,74 @@ const move = (source, destination, droppableSource, droppableDestination) => {
 
 class DragAndDropBoard extends Component {
     state = {
-        items: TASKS_NEED_TO_DO,
-        selected: TASKS_IN_PROGRESS,
-        thirdColumn: []
+        issues: [],
+        needToDo: [],
+        inProgress: [],
+        done: []
     };
 
     id2List = {
-        droppable: 'items',
-        droppable2: 'selected',
-        droppable3: 'thirdColumn'
+        droppable: 'needToDo',
+        droppable2: 'inProgress',
+        droppable3: 'done'
+    };
+
+    getIssues = () => {
+        fetch(`https://tatiana-backend.herokuapp.com/issues`,{
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + this.props.token
+            }
+        }).then(result => result.json())
+        .then((result) => {
+            this.setLists(result);
+        }).catch(err => console.error(err));
+    };
+
+    updateIssue = ( issue ) => {
+        console.log(issue);
+        let url = `https://tatiana-backend.herokuapp.com/issues/` + issue.id;
+        fetch(url,{
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + this.props.token
+            },
+            body: JSON.stringify({
+                issue: issue
+            })
+        }).then(result => result.json())
+        .then( () => {}).catch(err => console.error(err));
+    };
+
+    componentDidMount = () => {
+        this.getIssues();
+    };
+
+    componentWillUnmount = () => {
+        const { needToDo, inProgress, done } = this.state;
+        needToDo.forEach((issue) => { if (issue.status !== 'needToDo'){
+            let newIssue = { ...issue, status: 'needToDo'};
+            this.updateIssue(newIssue);
+        }});
+        inProgress.forEach((issue) => { if (issue.status !== 'inProgress'){
+            let newIssue = { ...issue, status: 'inProgress'};
+            this.updateIssue(newIssue);
+        }});
+        done.forEach((issue) => { if (issue.status !== 'done'){
+            let newIssue = { ...issue, status: 'done'};
+            this.updateIssue(newIssue);
+        }});
+    };
+
+    setLists = (result) => {
+        let needToDo = result.filter((issue) => issue.status === 'needToDo');
+        let inProgress = result.filter((issue) => issue.status === 'inProgress');
+        let done = result.filter((issue) => issue.status === 'done');
+        this.setState({issues: result, needToDo: needToDo, inProgress: inProgress, done: done});
     };
 
     getList = id => this.state[this.id2List[id]];
@@ -107,20 +193,20 @@ class DragAndDropBoard extends Component {
         }
 
         if (source.droppableId === destination.droppableId) {
-            const items = reorder(
+            const needToDo = reorder(
                 this.getList(source.droppableId),
                 source.index,
                 destination.index
             );
 
-            let state = { items };
+            let state = { needToDo };
 
             if (source.droppableId === 'droppable2') {
-                state = { selected: items };
+                state = { inProgress: needToDo };
             }
 
             if (source.droppableId === 'droppable3') {
-                state = { thirdColumn: items };
+                state = { done: needToDo };
             }
 
             this.setState(state);
@@ -153,7 +239,7 @@ class DragAndDropBoard extends Component {
                                 className={ classes.list }
                             >
                                 <p className={ classes.title }>Нужно сделать</p>
-                                {this.state.items.map((item, index) => (
+                                {this.state.needToDo.map((item, index) => (
                                     <Draggable
                                         key={item.id}
                                         draggableId={item.id}
@@ -166,8 +252,9 @@ class DragAndDropBoard extends Component {
                                                 className={ classNames(classes.card,
                                                 snapshot.isDragging ? classes.selectedCard : '')}
                                             >
-                                                <Typography variant="body1" className={ classes.cardTitle }>{ item.text }</Typography>
-                                                <Typography variant="subtitle2" className={ classes.date }>{ item.date }</Typography>
+                                                <PriorityIcon className={ classes[item.priority] } />
+                                                <Typography variant="body1" className={ classes.cardTitle }>{ ISSUE_TOPICS_NAME[item.related_to] }</Typography>
+                                                <Typography variant="subtitle2" className={ classes.date }>{ item.commentary }</Typography>
                                             </div>
                                         )}
                                     </Draggable>
@@ -183,7 +270,7 @@ class DragAndDropBoard extends Component {
                                 className={ classes.list }
                             >
                                 <p className={ classes.title }>В процессе</p>
-                                {this.state.selected.map((item, index) => (
+                                {this.state.inProgress.map((item, index) => (
                                     <Draggable
                                         key={item.id}
                                         draggableId={item.id}
@@ -196,8 +283,9 @@ class DragAndDropBoard extends Component {
                                                 className={ classNames(classes.card,
                                                 snapshot.isDragging ? classes.selectedCard : '')}
                                             >
-                                                <Typography variant="body1" className={ classes.cardTitle }>{ item.text }</Typography>
-                                                <Typography variant="subtitle2" className={ classes.date }>{ item.date }</Typography>
+                                                <PriorityIcon className={ classes[item.priority] } />
+                                                <Typography variant="body1" className={ classes.cardTitle }>{ ISSUE_TOPICS_NAME[item.related_to] }</Typography>
+                                                <Typography variant="subtitle2" className={ classes.date }>{ item.commentary }</Typography>
                                             </div>
                                         )}
                                     </Draggable>
@@ -213,7 +301,7 @@ class DragAndDropBoard extends Component {
                                 className={ classes.list }
                             >
                                 <p className={ classes.title }>Готово</p>
-                                {this.state.thirdColumn.map((item, index) => (
+                                {this.state.done.map((item, index) => (
                                     <Draggable
                                         key={item.id}
                                         draggableId={item.id}
@@ -226,8 +314,9 @@ class DragAndDropBoard extends Component {
                                                 className={ classNames(classes.card,
                                                 snapshot.isDragging ? classes.selectedCard : '')}
                                             >
-                                                <Typography variant="body1" className={ classes.cardTitle }>{ item.text }</Typography>
-                                                <Typography variant="subtitle2" className={ classes.date }>{ item.date }</Typography>
+                                                <PriorityIcon className={ classes[item.priority] } />
+                                                <Typography variant="body1" className={ classes.cardTitle }>{ ISSUE_TOPICS_NAME[item.related_to] }</Typography>
+                                                <Typography variant="subtitle2" className={ classes.date }>{ item.commentary }</Typography>
                                             </div>
                                         )}
                                     </Draggable>
@@ -243,4 +332,4 @@ class DragAndDropBoard extends Component {
     }
 }
 
-export default withStyles(styles)(DragAndDropBoard);
+export default withStyles(styles)(connect(mapStateToProps, { auth })(DragAndDropBoard));
