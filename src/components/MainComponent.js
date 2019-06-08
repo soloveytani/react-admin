@@ -4,7 +4,7 @@ import { Route, Redirect } from "react-router-dom";
 import Layout from '../components/Layout';
 import Home from '../pages/Home';
 import UserList from '../pages/UserList';
-import RequestList from '../pages/RequestList';
+import IssuesList from '../pages/IssuesList';
 import LoginForm from '../pages/LoginForm';
 import { connect } from 'react-redux';
 import { auth }  from '../actions';
@@ -26,7 +26,7 @@ class MainComponent extends Component {
                 <Route path="/login" exact component={ LoginForm } />
                 <Route path="/" exact component={ () => token ? <Layout><Home/></Layout> : <Redirect to="/login"/> }/>
                 <Route path="/users" component={ () => token ? <Layout><UserList/></Layout> : <Redirect to="/login" /> }/>
-                <Route path="/requests" component={ () => token ? <Layout><RequestList/></Layout> : <Redirect to="/login"/> }/>
+                <Route path="/requests" component={ () => token ? <Layout><IssuesList/></Layout> : <Redirect to="/login"/> }/>
             </div>
         );
     };

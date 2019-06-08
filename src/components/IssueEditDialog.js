@@ -14,7 +14,19 @@ const styles = {
     },
     textField: {
         width: '100%',
-        margin: '14px 0 4px'
+        margin: '18px 0 4px'
+    },
+    item: {
+        margin: '4px 0 18px',
+        display: 'flex',
+        '& span': {
+            display: 'block',
+            minWidth: '100px',
+            fontWeight: '500',
+            textAlign: 'right',
+            paddingRight: '10px',
+            color: '#5e6169'
+        }
     }
 };
 
@@ -55,8 +67,10 @@ class IssueEditDialog extends Component {
             >
             <DialogTitle id="form-dialog-title">Редактирование заявки</DialogTitle>
             <DialogContent className={ classes.container }>
-                <Typography variant="body1">Проблема: { ISSUE_TOPICS_NAME[issue.related_to] }</Typography>
-                <Typography variant="body1" color="primary">Комментарий: { issue.commentary }</Typography>
+                <Typography variant="body1" className={ classes.item } color="primary"><span>Тема:</span> { ISSUE_TOPICS_NAME[issue.related_to] }</Typography>
+                <Typography variant="body1" className={ classes.item } color="primary"><span>Описание:</span> { issue.commentary }</Typography>
+                <Typography variant="body1" className={ classes.item } color="primary"><span>Создана:</span> { issue.created_at }</Typography>
+                <Typography variant="body1" className={ classes.item } color="primary"><span>Обновлена:</span> { issue.updated_at }</Typography>
                 <TextField
                     select
                     id="status"

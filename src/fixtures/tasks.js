@@ -48,34 +48,25 @@ export const TASKS_IN_PROGRESS = [
     }
 ];
 
-export const RELATED_TO = [
-    '-',
-    'Программное обеспечение',
-    'Операционная система',
-    'Интернет',
-    'Принтер',
-    'Авторизация',
-];
-
 export const ISSUE_TOPICS = [
     {
-        value: 1,
+        value: '1',
         label: 'Поддержка пользователей'
     },
     {
-        value: 2,
+        value: '2',
         label: 'Проблемы с оборудованием'
     },
     {
-        value: 3,
+        value: '3',
         label: 'Проблемы с интернетом'
     },
     {
-        value: 4,
+        value: '4',
         label: 'Проблема с ИС "Барс"'
     },
     {
-        value: 5,
+        value: '5',
         label: 'Проблема с "1С"'
     }
 ];
@@ -109,6 +100,11 @@ export const ISSUE_STATUS_OPTIONS = [
     }
 ];
 
+export const ISSUE_PRIORITY = {
+    'low': 'Низкий',
+    'normal': 'Средний',
+    'high': 'Высокий'
+}
 
 export const PRIORITY_OPTIONS = [
     {
